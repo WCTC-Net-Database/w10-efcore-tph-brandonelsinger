@@ -11,8 +11,32 @@ public abstract class Character : ICharacter
 
     // Navigation property to Room
     public virtual Room Room { get; set; }
+    public virtual ICollection<Ability> Abilities { get; set; } = new List<Ability>();
+
+    public virtual Ability? ChooseAbility()
+    {
+        return Abilities?.FirstOrDefault();
+    }
+
+    public virtual void ExecuteAbility(Ability ability)
+    {
+        if (ability != null)
+        {
+            Console.WriteLine($"{Name} uses {ability.Name}!");
+        }
+        else
+        {
+            Console.WriteLine($"{Name} has no abilities to use.");
+        }
+    }
     public virtual void Attack(ICharacter target)
     {
         Console.WriteLine($"{Name} attacks {target.Name}!");
+
+        var ability = ChooseAbility();
+        if (ability != null)
+        {
+            ExecuteAbility(ability);
+        }
     }
 }

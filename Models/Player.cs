@@ -14,6 +14,12 @@ namespace W9_assignment_template.Models
         {
             // Player-specific attack logic
             Console.WriteLine($"{Name} attacks {target.Name} with a sword!");
+
+            var ability = ChooseAbility();
+            if (ability != null)
+            {
+                ExecuteAbility(ability);
+            }
         }
     }
 }

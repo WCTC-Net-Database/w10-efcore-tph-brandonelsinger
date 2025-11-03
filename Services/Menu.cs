@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using W9_assignment_template.Data;
+using W9_assignment_template.Models;
 
 namespace W9_assignment_template.Services;
 
@@ -19,6 +20,7 @@ public class Menu
             Console.WriteLine("1. Display Rooms");
             Console.WriteLine("2. Display Characters");
             Console.WriteLine("3. Exit");
+            Console.WriteLine("4. Battle Demo");
             Console.Write("Enter your choice: ");
 
             var choice = Console.ReadLine();
@@ -33,6 +35,9 @@ public class Menu
                     break;
                 case "3":
                     return;
+                case "4":
+                    RunBattleDemo();
+                    break;
                 default:
                     Console.WriteLine("Invalid option, please try again.");
                     break;
@@ -69,6 +74,30 @@ public class Menu
         {
             Console.WriteLine("No characters available.");
         }
+    }
+
+    private void RunBattleDemo()
+    {
+        var player = _gameContext.Characters
+            .OfType<Player>()
+            .Include(c => c.Abilities)
+            .FirstOrDefault();
+
+        var goblin = _gameContext.Characters
+            .OfType<Goblin>()
+            .Include(c => c.Abilities)
+            .FirstOrDefault();
+
+        if (player == null || goblin == null)
+        {
+            Console.WriteLine("Need at least one Player and one Goblin to demo a battle.");
+            return;
+        }
+
+        Console.WriteLine("\n--- Battle Demo ---");
+        player.Attack(goblin);  
+        goblin.Attack(player);  
+        Console.WriteLine("--- End Demo ---\n");
     }
 
 }
